@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" 
+             xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" 
+             xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:camunda="http://camunda.org/schema/1.0/dmn"
+             id="loan-risk-definitions" 
+             name="Loan Risk Assessment"
+             namespace="http://camunda.org/schema/1.0/dmn">
+  
+  <decision id="loan-risk-decision" name="Loan Risk Assessment" camunda:historyTimeToLive="30">
+    <decisionTable id="decisionTable">
+      <input id="input1" label="Credit Score" camunda:inputVariable="creditScore">
+        <inputExpression id="inputExpression1" typeRef="integer">
+          <text>creditScore</text>
+        </inputExpression>
+      </input>
+      
+      <input id="input2" label="Loan Amount" camunda:inputVariable="loanAmount">
+        <inputExpression id="inputExpression2" typeRef="double">
+          <text>loanAmount</text>
+        </inputExpression>
+      </input>
+      
+      <input id="input3" label="Annual Income" camunda:inputVariable="annualIncome">
+        <inputExpression id="inputExpression3" typeRef="double">
+          <text>annualIncome</text>
+        </inputExpression>
+      </input>
+      
+      <input id="input4" label="Employment Years" camunda:inputVariable="employmentYears">
+        <inputExpression id="inputExpression4" typeRef="integer">
+          <text>employmentYears</text>
+        </inputExpression>
+      </input>
+      
+      <output id="output1" label="Risk Level" name="riskDecision" typeRef="string" />
+      <output id="output2" label="Interest Rate" name="interestRate" typeRef="double" />
+      
+      <!-- Rule 1: High Credit Score, Low Loan to Income Ratio, Stable Employment -->
+      <rule id="rule1">
+        <inputEntry id="inputEntry1_1">
+          <text>&gt;= 750</text>
+        </inputEntry>
+        <inputEntry id="inputEntry2_1">
+          <text>&lt; annualIncome * 3</text>
+        </inputEntry>
+        <inputEntry id="inputEntry3_1">
+          <text>&gt;= 50000</text>
+        </inputEntry>
+        <inputEntry id="inputEntry4_1">
+          <text>&gt;= 3</text>
+        </inputEntry>
+        <outputEntry id="outputEntry1_1">
+          <text>"LOW"</text>
+        </outputEntry>
+        <outputEntry id="outputEntry2_1">
+          <text>3.5</text>
+        </outputEntry>
+      </rule>
+      
+      <!-- Rule 2: Good Credit Score, Reasonable Loan Amount -->
+      <rule id="rule2">
+        <inputEntry id="inputEntry1_2">
+          <text>[700..749]</text>
+        </inputEntry>
+        <inputEntry id="inputEntry2_2">
+          <text>&lt; annualIncome * 4</text>
+        </inputEntry>
+        <inputEntry id="inputEntry3_2">
+          <text>&gt;= 40000</text>
+        </inputEntry>
+        <inputEntry id="inputEntry4_2">
+          <text>&gt;= 2</text>
+        </inputEntry>
+        <outputEntry id="outputEntry1_2">
+          <text>"LOW"</text>
+        </outputEntry>
+        <outputEntry id="outputEntry2_2">
+          <text>4.5</text>
+        </outputEntry>
+      </rule>
+      
+      <!-- Rule 3: Medium Credit Score, Moderate Risk -->
+      <rule id="rule3">
+        <inputEntry id="inputEntry1_3">
+          <text>[650..699]</text>
+        </inputEntry>
+        <inputEntry id="inputEntry2_3">
+          <text>&lt; annualIncome * 3</text>
+        </inputEntry>
+        <inputEntry id="inputEntry3_3">
+          <text>&gt;= 35000</text>
+        </inputEntry>
+        <inputEntry id="inputEntry4_3">
+          <text>&gt;= 1</text>
+        </inputEntry>
+        <outputEntry id="outputEntry1_3">
+          <text>"MEDIUM"</text>
+        </outputEntry>
+        <outputEntry id="outputEntry2_3">
+          <text>6.5</text>
+        </outputEntry>
+      </rule>
+      
+      <!-- Rule 4: Medium Credit Score, Higher Loan Amount -->
+      <rule id="rule4">
+        <inputEntry id="inputEntry1_4">
+          <text>[650..699]</text>
+        </inputEntry>
+        <inputEntry id="inputEntry2_4">
+          <text>&gt;= annualIncome * 3</text>
+        </inputEntry>
+        <inputEntry id="inputEntry3_4">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="inputEntry4_4">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="outputEntry1_4">
+          <text>"MEDIUM"</text>
+        </outputEntry>
+        <outputEntry id="outputEntry2_4">
+          <text>7.5</text>
+        </outputEntry>
+      </rule>
+      
+      <!-- Rule 5: Low Credit Score -->
+      <rule id="rule5">
+        <inputEntry id="inputEntry1_5">
+          <text>[600..649]</text>
+        </inputEntry>
+        <inputEntry id="inputEntry2_5">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="inputEntry3_5">
+          <text>&gt;= 30000</text>
+        </inputEntry>
+        <inputEntry id="inputEntry4_5">
+          <text>&gt;= 1</text>
+        </inputEntry>
+        <outputEntry id="outputEntry1_5">
+          <text>"MEDIUM"</text>
+        </outputEntry>
+        <outputEntry id="outputEntry2_5">
+          <text>8.5</text>
+        </outputEntry>
+      </rule>
+      
+      <!-- Rule 6: Poor Credit Score -->
+      <rule id="rule6">
+        <inputEntry id="inputEntry1_6">
+          <text>&lt; 600</text>
+        </inputEntry>
+        <inputEntry id="inputEntry2_6">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="inputEntry3_6">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="inputEntry4_6">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="outputEntry1_6">
+          <text>"HIGH"</text>
+        </outputEntry>
+        <outputEntry id="outputEntry2_6">
+          <text>12.0</text>
+        </outputEntry>
+      </rule>
+      
+      <!-- Rule 7: High Loan to Income Ratio -->
+      <rule id="rule7">
+        <inputEntry id="inputEntry1_7">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="inputEntry2_7">
+          <text>&gt;= annualIncome * 5</text>
+        </inputEntry>
+        <inputEntry id="inputEntry3_7">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="inputEntry4_7">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="outputEntry1_7">
+          <text>"HIGH"</text>
+        </outputEntry>
+        <outputEntry id="outputEntry2_7">
+          <text>10.0</text>
+        </outputEntry>
+      </rule>
+      
+      <!-- Rule 8: Insufficient Employment History -->
+      <rule id="rule8">
+        <inputEntry id="inputEntry1_8">
+          <text>&lt; 650</text>
+        </inputEntry>
+        <inputEntry id="inputEntry2_8">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="inputEntry3_8">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="inputEntry4_8">
+          <text>&lt; 1</text>
+        </inputEntry>
+        <outputEntry id="outputEntry1_8">
+          <text>"HIGH"</text>
+        </outputEntry>
+        <outputEntry id="outputEntry2_8">
+          <text>11.0</text>
+        </outputEntry>
+      </rule>
+      
+    </decisionTable>
+  </decision>
+  
+</definitions>

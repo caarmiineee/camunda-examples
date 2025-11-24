@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" 
+             xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" 
+             xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:camunda="http://camunda.org/schema/1.0/dmn"
+             id="discount-definitions" 
+             name="Order Discount Calculation"
+             namespace="http://camunda.org/schema/1.0/dmn">
+  
+  <decision id="discount-decision" name="Calculate Order Discount" camunda:historyTimeToLive="30">
+    <decisionTable id="discountTable" hitPolicy="COLLECT" aggregation="MAX">
+      <input id="discountInput1" label="Customer Type" camunda:inputVariable="customerType">
+        <inputExpression id="discountInputExpression1" typeRef="string">
+          <text>customerType</text>
+        </inputExpression>
+      </input>
+      
+      <input id="discountInput2" label="Order Amount" camunda:inputVariable="orderAmount">
+        <inputExpression id="discountInputExpression2" typeRef="double">
+          <text>orderAmount</text>
+        </inputExpression>
+      </input>
+      
+      <input id="discountInput3" label="Is Member" camunda:inputVariable="isMember">
+        <inputExpression id="discountInputExpression3" typeRef="boolean">
+          <text>isMember</text>
+        </inputExpression>
+      </input>
+      
+      <output id="discountOutput" label="Discount Percentage" name="discountPercentage" typeRef="double" />
+      
+      <!-- Rule 1: VIP Customer -->
+      <rule id="discountRule1">
+        <inputEntry id="discountInputEntry1_1">
+          <text>"VIP"</text>
+        </inputEntry>
+        <inputEntry id="discountInputEntry2_1">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="discountInputEntry3_1">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="discountOutputEntry1">
+          <text>20</text>
+        </outputEntry>
+      </rule>
+      
+      <!-- Rule 2: Premium Customer -->
+      <rule id="discountRule2">
+        <inputEntry id="discountInputEntry1_2">
+          <text>"PREMIUM"</text>
+        </inputEntry>
+        <inputEntry id="discountInputEntry2_2">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="discountInputEntry3_2">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="discountOutputEntry2">
+          <text>15</text>
+        </outputEntry>
+      </rule>
+      
+      <!-- Rule 3: Regular Customer -->
+      <rule id="discountRule3">
+        <inputEntry id="discountInputEntry1_3">
+          <text>"REGULAR"</text>
+        </inputEntry>
+        <inputEntry id="discountInputEntry2_3">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="discountInputEntry3_3">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="discountOutputEntry3">
+          <text>10</text>
+        </outputEntry>
+      </rule>
+      
+      <!-- Rule 4: Large Order Discount -->
+      <rule id="discountRule4">
+        <inputEntry id="discountInputEntry1_4">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="discountInputEntry2_4">
+          <text>&gt;= 1000</text>
+        </inputEntry>
+        <inputEntry id="discountInputEntry3_4">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="discountOutputEntry4">
+          <text>15</text>
+        </outputEntry>
+      </rule>
+      
+      <!-- Rule 5: Medium Order Discount -->
+      <rule id="discountRule5">
+        <inputEntry id="discountInputEntry1_5">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="discountInputEntry2_5">
+          <text>[500..999]</text>
+        </inputEntry>
+        <inputEntry id="discountInputEntry3_5">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="discountOutputEntry5">
+          <text>10</text>
+        </outputEntry>
+      </rule>
+      
+      <!-- Rule 6: Small Order Discount -->
+      <rule id="discountRule6">
+        <inputEntry id="discountInputEntry1_6">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="discountInputEntry2_6">
+          <text>[200..499]</text>
+        </inputEntry>
+        <inputEntry id="discountInputEntry3_6">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="discountOutputEntry6">
+          <text>5</text>
+        </outputEntry>
+      </rule>
+      
+      <!-- Rule 7: Member Bonus -->
+      <rule id="discountRule7">
+        <inputEntry id="discountInputEntry1_7">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="discountInputEntry2_7">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="discountInputEntry3_7">
+          <text>true</text>
+        </inputEntry>
+        <outputEntry id="discountOutputEntry7">
+          <text>5</text>
+        </outputEntry>
+      </rule>
+      
+    </decisionTable>
+  </decision>
+  
+</definitions>
